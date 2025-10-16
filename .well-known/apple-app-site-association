@@ -1,0 +1,14 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": [ "55CP4R5Z3N.com.omochaya.pcheten" ],
+        "components": [
+          {
+            "/": "/pcheten/*"
+          }
+        ]
+      }
+    ]
+  }
+}
