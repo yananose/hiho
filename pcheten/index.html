@@ -9,13 +9,13 @@
 const userAgent = navigator.userAgent;
 const redirectUrl = {
     android: 'https://play.google.com/store/apps/details?id=com.omochaya.pcheten&hl=ja', // AndroidのストアURL
-    // ios: 'https://apps.apple.apple.com/jp/app/id123456789' // iOSのストアURL
+    ios: 'https://apps.apple.apple.com/jp/app/id6754209586' // iOSのストアURL
 };
 
 if (/Android/i.test(userAgent)) {
     window.location.replace(redirectUrl.android);
 } else if (/iPhone|iPad|iPod/i.test(userAgent)) {
-    // window.location.replace(redirectUrl.ios);
+    window.location.replace(redirectUrl.ios);
 }
 
   </script>
@@ -25,6 +25,6 @@ if (/Android/i.test(userAgent)) {
   <a href="https://play.google.com/store/apps/details?id=com.omochaya.pcheten&hl=ja">https://play.google.com/store/apps/details?id=com.omochaya.pcheten&hl=ja</a>
   <p>　</p>
   <p>iOS版「ぷちっと♪英単語」のインストールはこちらから</p>
-  <a href="https://apps.apple.apple.com/jp/app/id123456789">https://apps.apple.apple.com/jp/app/id123456789</a>
+  <a href="https://apps.apple.apple.com/jp/app/id6754209586">https://apps.apple.apple.com/jp/app/id6754209586</a>
 </body>
 </html>
