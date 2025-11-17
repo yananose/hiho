@@ -33,6 +33,32 @@ if (/Android/i.test(userAgent)) {
 }
 
   </script>
+
+  <style>
+      #codeInfo {
+          font-family: Arial, sans-serif;
+          padding: 20px;
+          visibility: hidden; /* 初期状態では非表示 */
+      }
+      /* エンコード結果の表示エリアのスタイル */
+      #encodedOutput {
+          margin-top: 15px;
+          padding: 20px;
+          border: 2px solid #007bff;
+          background-color: #f8f9fa;
+          font-size: 1.2em;
+          font-weight: bold;
+          cursor: pointer; /* クリック可能であることを示す */
+          user-select: all; /* テキストを選択しやすくする */
+          text-align: center;
+      }
+      .copy-message {
+          color: green;
+          font-weight: bold;
+          margin-top: 10px;
+      }
+  </style>
+
 </head>
 <body>
 <div style="margin: 25px; text-align: center;">
@@ -41,17 +67,78 @@ if (/Android/i.test(userAgent)) {
     <img src="pcheten-preview1200x630.png" alt="「ぷちっと♪英単語」のプレビュー画像" style="height: 320px;">
 </div>
 <div style="margin: 25px; text-align: center;">    
-    <a href="https://play.google.com/store/apps/details?id=com.omochaya.pcheten" target="_blank" rel="noopener noreferrer">
-    <img src="/GetItOnGooglePlay_Badge_Web_color_Japanese.png" alt="Google Play で手に入れよう" style="height: 80px; border: 0; vertical-align: middle; object-fit: contain; margin: 25px;"></a><a href="https://apps.apple.com/jp/app/%E3%81%B7%E3%81%A1%E3%81%A3%E3%81%A8%E8%8B%B1%E5%8D%98%E8%AA%9E/id6754209586?itscg=30200&itsct=apps_box_badge&mttnsubad=6754209586" style="display: inline-block;">
+    <a href="https://apps.apple.com/jp/app/%E3%81%B7%E3%81%A1%E3%81%A3%E3%81%A8%E8%8B%B1%E5%8D%98%E8%AA%9E/id6754209586?itscg=30200&itsct=apps_box_badge&mttnsubad=6754209586" style="display: inline-block;">
     <img src="https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/ja-jp?releaseDate=1761436800" alt="App Storeでダウンロード" style="width: 224px; height: 82px; border: 0; vertical-align: middle; object-fit: contain; margin: 25px;" />
-    </a>
+    </a><a href="https://play.google.com/store/apps/details?id=com.omochaya.pcheten" target="_blank" rel="noopener noreferrer">
+    <img src="/GetItOnGooglePlay_Badge_Web_color_Japanese.png" alt="Google Play で手に入れよう" style="height: 80px; border: 0; vertical-align: middle; object-fit: contain; margin: 25px;"></a>
 </div>
+
+
+<div id="codeInfo">
+    <div id="encodedOutput">　　</div>
+    <div id="copyMessage" class="copy-message">　　</div>
+</div>
+
+<script>
+    const hash = {
+        '0': 'M', 'a': 'U', '3': 'c', 'D': 'z', '2': 'N', 'k': 'T', 'B': '9', 'p': 'G', 'F': '0', 'E': 'a',
+        'Z': 'I', 'i': 'V', 's': 'j', '6': 'i', 'd': 'o', 'j': 'k', 'R': 'e', 'K': '5', 'L': '2', 'G': 'Q',
+        'r': '7', '9': '6', 'P': 'W', '5': 'R', 'T': 'w', 'M': 'h', 'f': 'P', 'Q': '4', '4': 'y', 'X': 'C',
+        'e': 'F', 'u': '-', 'v': 'f', 'w': 'S', 'W': 't', 'Y': 'g', 'q': 'v', 'N': 'r', '7': '3', 'C': 'E',
+        'g': 'B', 'm': 'X', 't': 'K', 'n': 'A', 'x': 'q', 'H': '1', 'A': 'd', 'J': 'p', '8': 'Z', '1': 'D',
+        'O': '_', 'V': 'n', 'b': 'H', 'y': '8', 'o': 'J', '-': 'x', 'z': 'l', 'S': 'b', 'l': 'O', 'c': 'L',
+        'I': 'm', '_': 'u', 'h': 's', 'U': 'Y'
+    };
+
+    function encodeStringFromUrl() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const text = urlParams.get('code') || '';
+        let code = '';
+        
+        for (const c of text) {
+            if (hash[c] !== undefined) {
+                code += hash[c];
+            }
+        }
+        return code;
+    }
+
+    function copyToClipboard(textToCopy) {
+        // navigator.clipboard.writeText を使用 (モダンで推奨される方法)
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            // コピー成功時のフィードバック
+            const message = document.getElementById('copyMessage');
+            message.textContent = '✅ クリップボードにコピー完了';
+            setTimeout(() => {
+                message.textContent = '　　';
+            }, 2000); // 2秒後にメッセージを非表示にする
+        }).catch(err => {
+            console.error('クリップボードへのコピーに失敗しました:', err);
+            alert('コピーに失敗しました。ブラウザのセキュリティ設定を確認してください。');
+        });
+    }
+
+    // ページロード時の処理
+    document.addEventListener('DOMContentLoaded', () => {
+        const encodedResult = encodeStringFromUrl();
+        if (encodedResult) {
+            const codeInfoElement = document.getElementById('codeInfo');
+            codeInfoElement.style.visibility = 'visible';
+            const outputElement = document.getElementById('encodedOutput');
+            outputElement.textContent = encodedResult;
+            outputElement.addEventListener('click', () => {
+                copyToClipboard(encodedResult);
+            });
+        }
+});
+</script>
+
 <div style="font-size: 0.8em; color: #666; text-align: center; padding: 10px 0;">
-    <p style="margin: 5px 0 0 0;">
-        Google Play、Android は Google LLC の商標です。
-    </p>
     <p style="margin: 0;">
         Apple、Appleロゴ、App Store、iPhone、iPadは、米国およびその他の国と地域で登録されたApple Inc.の商標です。
+    </p>
+    <p style="margin: 5px 0 0 0;">
+        Google Play、Android は Google LLC の商標です。
     </p>
     <p style="margin-top: 5px;">キャラクターイラスト著作「<a href=”https://ha-chi.biz/”>無料イラスト素材はちドットビズ</a>」様</p>
     <p style="margin: 0;">© 2025 街のおもちゃ屋さん. All rights reserved. </p>
